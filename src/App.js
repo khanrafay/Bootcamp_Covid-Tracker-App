@@ -9,8 +9,8 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Countries />
       <Record />
+      <Countries />
     </div>
   );
 }

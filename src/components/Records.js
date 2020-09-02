@@ -23,13 +23,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Record() {
     const classes = useStyles();
-
     const [globalData, setGlobalData] = useState({})
     useEffect(() => {
         async function getData() {
             const response = await fetch("https://api.thevirustracker.com/free-api?global=stats");
             const data = await response.json();
-            // console.log("x", data.results[0])
+            console.log("check2", data)
             delete data.results[0].source;
             setGlobalData(data.results[0])
         }
@@ -50,6 +49,7 @@ export default function Record() {
             <Grid container spacing={3}>
                 {
                     Object.keys(globalData).map((key, ind) => {
+                        
                         return (
                             <Grid item xs={6} sm={3} key={ind}>
                                 <Paper className={classes.paper}>
