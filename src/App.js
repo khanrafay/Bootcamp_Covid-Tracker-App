@@ -4,13 +4,16 @@ import './App.css';
 import NavBar from './components/NavBar'
 import Record from './components/Records';
 import Countries from './components/Countries';
+import Statistics from './components/Statistics';
+import Map from './components/Map';
 
 function App() {
   return (
     <div className="App">
       <NavBar />
-      <Record />
+      <Statistics />
       <Countries />
+      <Map />
     </div>
   );
 }

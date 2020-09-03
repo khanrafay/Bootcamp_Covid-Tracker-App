@@ -35,7 +35,7 @@ export default function SimpleSelect() {
     const [country, setCountry] = useState([]);
     const [selectCountry, setSelectCountry] = useState('');
     const [selectCode, setSelectCode] = useState('');
-    const [countryData, setCountryData] = useState({})
+    const [countryData, setCountryData] = useState([])
 
 
 
@@ -44,23 +44,20 @@ export default function SimpleSelect() {
         const data = await response.json();
         setCountry(data.countryitems[0])
         console.log(data);
-        console.log('hello');
     }
 
     async function getCountryData(code) {
         let count = 0;
         const response = await fetch(`https://api.thevirustracker.com/free-api?countryTotal=${code}`)
         const data = await response.json();
-        console.log('code' , data.countrydata)
         setCountryData(data.countrydata);
-    
+
     }
 
 
 
     const handleChange = (event) => {
         setSelectCountry(event.target.value);
-        console.log(event.target.value)
         getCountryData(event.target.value);
     };
 
@@ -72,7 +69,7 @@ export default function SimpleSelect() {
 
     return (
         <div>
-            <h1>Filter Stats Through Countries</h1>
+            <h1>Countries</h1>
             <FormControl className={classes.formControl}>
                 <InputLabel id="demo-simple-select-label">Country</InputLabel>
                 <Select
@@ -92,28 +89,16 @@ export default function SimpleSelect() {
                     })}
 
                 </Select>
-
-                <div className={classes.root}>
-                    <h2>Total Records</h2>
-                    <Grid container spacing={3}>
-                        {console.log('c', countryData)}
-                        {countryData &&
-                            Object.keys(countryData).map((key, ind) => {
-                                {delete countryData[key].info}
-                                console.log(countryData)
-                                return (
-                                    <Grid item xs={6} sm={3} key={ind}>                         
-                                        <Paper className={classes.paper}>
-                                            <h3>{countryData[key]}</h3>
-                                        </Paper>
-
-                                    </Grid>
-                                )
-                            })
-                        }
-
-                    </Grid>
-                </div>
+                {
+                    countryData && countryData.map(data => {
+                        return (
+                            <>
+                                {delete data.info}
+                                <Record statistics={data} />
+                            </>
+                        )
+                    })
+                }
             </FormControl>
         </div>
     )

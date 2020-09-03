@@ -21,44 +21,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Record() {
+export default function Record(props) {
     const classes = useStyles();
-    const [globalData, setGlobalData] = useState({})
-    useEffect(() => {
-        async function getData() {
-            const response = await fetch("https://api.thevirustracker.com/free-api?global=stats");
-            const data = await response.json();
-            console.log("check2", data)
-            delete data.results[0].source;
-            setGlobalData(data.results[0])
-        }
-       // getCountries();
-        getData();
-    }, [])
+    const { statistics } = props;
 
-    async function getCountries() {
-        const response = await fetch("https://api.thevirustracker.com/free-api?countryTotals=ALL");
-        const data = await response.json();
-        console.log(data.countryitems[0]);
-    }
 
-    
     return (
         <div className={classes.root}>
-            <h2>Total Records</h2>
             <Grid container spacing={3}>
-                {
-                    Object.keys(globalData).map((key, ind) => {
-                        
-                        return (
-                            <Grid item xs={6} sm={3} key={ind}>
-                                <Paper className={classes.paper}>
-                                    <h4 className={classes.title}>{key.replace(/_/g, " ")}</h4>
-                                    <h3>{globalData[key]}</h3>
-                                </Paper>
-                            </Grid>
-                        )
-                    })
+                {statistics && Object.keys(statistics).map((key, ind) => {
+                    return (
+                        <Grid item xs={6} sm={3} key={ind}>
+                            <Paper className={classes.paper}>
+                                <h4 className={classes.title}>{key.replace(/_/g, " ")}</h4>
+                                <h3>{statistics[key]}</h3>
+                            </Paper>
+                        </Grid>
+                    )
+                })
                 }
 
             </Grid>
