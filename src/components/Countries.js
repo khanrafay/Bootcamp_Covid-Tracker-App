@@ -8,7 +8,10 @@ import Select from '@material-ui/core/Select';
 import Record from './Records';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import RadarChart from './RadarChart';
+import DoughnutChart from './DoughnutChart';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -18,9 +21,11 @@ const useStyles = makeStyles((theme) => ({
         padding: 20
     },
     paper: {
-        padding: theme.spacing(2),
         textAlign: 'center',
         color: theme.palette.text.secondary,
+        width: '100%',
+        height: '60%',
+
     },
     title: {
         textTransform: 'uppercase'
@@ -36,14 +41,16 @@ export default function SimpleSelect() {
     const [selectCountry, setSelectCountry] = useState('');
     const [selectCode, setSelectCode] = useState('');
     const [countryData, setCountryData] = useState([])
+    const [value, setValue] = useState();
+
 
 
 
     async function getCountries() {
-        const response = await fetch("https://api.thevirustracker.com/free-api?countryTotals=ALL");
+        const response = await fetch('https://corona.lmao.ninja/v2/countries');
         const data = await response.json();
-        setCountry(data.countryitems[0])
-        console.log(data);
+        setCountry(data);
+
     }
 
     async function getCountryData(code) {
@@ -54,12 +61,15 @@ export default function SimpleSelect() {
 
     }
 
+    var result = Object.keys(country).map((key) => country[key]);
 
-
-    const handleChange = (event) => {
-        setSelectCountry(event.target.value);
-        getCountryData(event.target.value);
+    const defaultProps = {
+        options: result,
+        getOptionLabel: (option) => option.country,
     };
+
+
+    console.log(value);
 
 
     useEffect(() => {
@@ -69,37 +79,29 @@ export default function SimpleSelect() {
 
     return (
         <div>
-            <h1>Countries</h1>
-            <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">Country</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={selectCountry}
-                    onChange={handleChange}
-                >
-                    {Object.keys(country).map((val, index) => {
-                        return (
-                            <MenuItem
-                                key={index}
-                                value={country[val].code}>
-                                {country[val].title}
-                            </MenuItem>
-                        )
-                    })}
+            <h1>Search Statistics by Country</h1>
+            <Autocomplete
+                {...defaultProps}
+                id="disable-close-on-select"
+                disableCloseOnSelect
+                renderInput={(params) => (
+                    <TextField {...params} label="Search Country" margin="normal" />
+                )}
+                value={value}
+                onChange={(event, newValue) => {
+                    setValue(newValue);
+                }}
+            />
+            <Grid container >
+                <Grid xs={12}>
+                    <Paper>
+                        {/* <RadarChart selectedCountry={value} /> */}
+                        <DoughnutChart selectedCountry={value} />
+                    </Paper>
+                </Grid>
+            </Grid>
 
-                </Select>
-                {
-                    countryData && countryData.map(data => {
-                        return (
-                            <>
-                                {delete data.info}
-                                <Record statistics={data} />
-                            </>
-                        )
-                    })
-                }
-            </FormControl>
+
         </div>
     )
 }

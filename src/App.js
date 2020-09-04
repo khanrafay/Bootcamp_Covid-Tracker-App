@@ -6,6 +6,8 @@ import Record from './components/Records';
 import Countries from './components/Countries';
 import Statistics from './components/Statistics';
 import Map from './components/Map';
+import Playground from './components/Test';
+import RadarChart from './components/RadarChart';
 
 function App() {
   return (
@@ -13,7 +15,9 @@ function App() {
       <NavBar />
       <Statistics />
       <Countries />
+    
       <Map />
+
     </div>
   );
 }
