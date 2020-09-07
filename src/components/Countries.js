@@ -18,13 +18,19 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         marginTop: 50,
-        padding: 20
+        padding: 20,
+        marginBottom: 30
     },
     paper: {
+        padding: theme.spacing(2), 
         textAlign: 'center',
         color: theme.palette.text.secondary,
-        width: '100%',
-        height: '60%',
+        width: '85%',
+        height: '100%',
+        margin: '0 auto',
+        backgroundColor : '#fbfbfb',
+        padding: '20px'
+
 
     },
     title: {
@@ -68,9 +74,11 @@ export default function SimpleSelect() {
         getOptionLabel: (option) => option.country,
     };
 
+ 
 
-    console.log(value);
-
+    const handleChange = (newValue) => {
+     setValue(newValue);  
+    }
 
     useEffect(() => {
         getCountries();
@@ -80,6 +88,7 @@ export default function SimpleSelect() {
     return (
         <div>
             <h1>Search Statistics by Country</h1>
+            <div className="search-selector">
             <Autocomplete
                 {...defaultProps}
                 id="disable-close-on-select"
@@ -88,15 +97,21 @@ export default function SimpleSelect() {
                     <TextField {...params} label="Search Country" margin="normal" />
                 )}
                 value={value}
-                onChange={(event, newValue) => {
-                    setValue(newValue);
-                }}
+                // onChange={(event, newValue) => {
+                //     setValue(newValue);
+                // }}
+                onChange={(e, newValue) => handleChange(newValue)}
             />
+            </div>
             <Grid container >
-                <Grid xs={12}>
-                    <Paper>
-                        {/* <RadarChart selectedCountry={value} /> */}
+                <Grid xs={6}>
+                    <Paper className={classes.paper}>
                         <DoughnutChart selectedCountry={value} />
+                    </Paper>
+                </Grid>
+                <Grid xs={6}>
+                    <Paper className={classes.paper}>
+                        <RadarChart selectedCountry={value} />
                     </Paper>
                 </Grid>
             </Grid>

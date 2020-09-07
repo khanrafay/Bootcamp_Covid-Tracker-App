@@ -3,26 +3,31 @@ import { Doughnut } from 'react-chartjs-2';
 import { randomColor } from 'randomcolor';
 
 
-const DoughnutChart = ({ selectedCountry }) => {
-    let copyCountries = selectedCountry;
-    const filterStats = selectedCountry && (
-        delete copyCountries.continent,
-        delete copyCountries.country,
-        delete copyCountries.countryInfo
-    );
+const DoughnutChart = ({selectedCountry}) => {
 
-    console.log('copy', copyCountries)
-    const countryKey = selectedCountry && Object.keys(selectedCountry).map(key => key)
-    const countryValue = selectedCountry && Object.keys(selectedCountry).map(key => selectedCountry[key])
-    console.log(countryKey);
-    console.log(countryValue);
 
-    let randomColors = randomColor({ count: '23', hue: "random" });
-    console.log(randomColors)
+   const filterStats = selectedCountry && (
+    delete selectedCountry.continent,
+    delete selectedCountry.updated,
+    delete selectedCountry.countryInfo,
+    delete selectedCountry.population
+   )
+    
+
+   
+    let countryKey = selectedCountry && Object.keys(selectedCountry).map((key, ind) => key)
+    let countryValue = selectedCountry && Object.keys(selectedCountry).map((key, ind) => selectedCountry[key])
+
+    let countryKey1 = selectedCountry &&  countryKey.filter(val => val !== 'country');
+    let countryValue1 = selectedCountry && countryValue.filter(val => typeof val !== 'string');
+    console.log('ck')
+
+    let randomColors = selectedCountry && randomColor({ count: '23', hue: "random" });
+    
     const data = {
-        labels: countryKey,
+        labels: countryKey1,
         datasets: [{
-            data: countryValue,
+            data: countryValue1,
             backgroundColor: selectedCountry && randomColors,
             hoverBackgroundColor: selectedCountry && randomColors
         }]
@@ -30,8 +35,9 @@ const DoughnutChart = ({ selectedCountry }) => {
 
 
     return (<div>
-        <h2>Doughnut Example</h2>
+        <h2>Doughnut</h2>
         <Doughnut data={data} />
+       
     </div>);
 }
 
